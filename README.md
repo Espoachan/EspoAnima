@@ -1,7 +1,7 @@
 
 # EspoAnima
 
-EspoAnima is a program to create 2D draws and animation. Its main features are
+EspoAnima is a program to create draws and 2D animation. Its main features are
 
 
 
