@@ -1,0 +1,3 @@
+Makefile linguist-vendored
+*.pro linguist-vendored
+*.pri linguist-vendored
