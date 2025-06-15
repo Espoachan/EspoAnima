@@ -1,28 +1,34 @@
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui widgets
 
 CONFIG += c++17
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+# Desactiva APIs viejas si quieres forzarte a usar solo Qt 6
+# DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
 SOURCES += \
+    Canvas.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    menubarhelper.cpp
 
 HEADERS += \
-    mainwindow.h
+    Canvas.h \
+    mainwindow.h \
+    menubarhelper.h
 
+# Si no estás usando el diseñador de interfaces (Design), puedes eliminar esto:
 FORMS += \
     mainwindow.ui
 
 TRANSLATIONS +=
+
 CONFIG += lrelease
 CONFIG += embed_translations
 
-# Default rules for deployment.
+# Instalación (puedes dejarlo igual si no lo usas)
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc

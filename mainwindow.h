@@ -7,6 +7,12 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QIcon>
+#include <QMenuBar>
+#include <QAction>
+#include <QMenu>
+#include <QMessageBox>
+#include "Canvas.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -22,17 +28,27 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 public:
+    void createNewFile();
+    void about();
+    void openToolsDock();
+    void exportFn();
+    void updateToolButtons(Canvas::Tool tool);
+
+
+    QPushButton *penBtn;
+    QPushButton *colorBtn;
+    QPushButton *eraserBtn;
+    QPushButton *penSizeBtn;
+
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 private slots:
-    void cuandoPresionoBoton();
 
 private:
     Ui::MainWindow *ui;
     QWidget *centralWidget;
-    QPushButton *Button;
-    QLabel *Label;
-
+    QDockWidget *toolDock;
+    Canvas *canvas; // agrégalo como miembro privado
 };
 #endif // MAINWINDOW_H
