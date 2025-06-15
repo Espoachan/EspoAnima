@@ -2,6 +2,8 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QKeyEvent>
+#include <QRgb>
+#include <QStack>
 
 Canvas::Canvas(QWidget *parent)
     : QWidget{parent}
@@ -22,16 +24,25 @@ void Canvas::mousePressEvent(QMouseEvent *event){
         lastPanPoint = event->pos();
         setCursor(Qt::ClosedHandCursor);
     }
+
+    if (currentTool == Bucket && event->button() == Qt::LeftButton) {
+        QPoint imgPoint = ((event->pos() - offset) / scaleFactor).toPoint();
+        bucketFill(imgPoint, penColor);
+        return; // ya no hacer más nada
+    }
+
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent *event){
 
+
+    if(currentTool == Bucket){
+        return;
+    }
     if(currentTool == Pen){
         colorToUse = penColor;
-        penWidth = 5;
     }else if (currentTool == Eraser){
         colorToUse = Qt::white;
-        penWidth = 7;
     }
 
     if((event->buttons() & Qt::LeftButton) && drawing){
@@ -134,4 +145,32 @@ void Canvas::clearCanvas(){
 void Canvas::setTool(Tool tool){
     currentTool = tool;
 
+}
+
+void Canvas::bucketFill(const QPoint &startPoint, const QColor &fillColor)
+{
+    QRgb targetColor = image.pixel(startPoint);
+    QRgb replacementColor = fillColor.rgb();
+
+    if (targetColor == replacementColor){
+        return;
+    }
+
+    QStack<QPoint> stack;
+    stack.push(startPoint);
+
+    while (!stack.isEmpty()){
+        QPoint pt = stack.pop();
+
+        if(image.rect().contains(pt) && image.pixel(pt) == targetColor){
+            image.setPixel(pt, replacementColor);
+
+            stack.push(QPoint(pt.x() + 1, pt.y()));
+            stack.push(QPoint(pt.x() - 1, pt.y()));
+            stack.push(QPoint(pt.x(), pt.y() + 1));
+            stack.push(QPoint(pt.x(), pt.y() - 1));
+        }
+    }
+
+    update();
 }

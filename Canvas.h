@@ -17,12 +17,14 @@ public:
 
     QPoint currentMousePos;
 
-    enum Tool { Pen, Eraser};
+    enum Tool { Pen, Eraser, Bucket};
 
     Tool currentTool = Pen;
 
     QColor colorToUse;
-    int penWidth;
+    double penWidth;
+
+    void bucketFill(const QPoint &startPoint, const QColor &fillColor);
 
     void setTool(Tool tool);
 

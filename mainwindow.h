@@ -12,6 +12,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include "Canvas.h"
+#include <QToolButton>
 
 
 QT_BEGIN_NAMESPACE
@@ -35,10 +36,11 @@ public:
     void updateToolButtons(Canvas::Tool tool);
 
 
-    QPushButton *penBtn;
+    QToolButton *penBtn;
     QPushButton *colorBtn;
-    QPushButton *eraserBtn;
+    QToolButton *eraserBtn;
     QPushButton *penSizeBtn;
+    QToolButton *paintBucketBtn;
 
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();

@@ -5,7 +5,9 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include "Canvas.h"
-#include <QSlider>
+#include <QToolButton>
+#include <QLineEdit>
+#include <QDoubleValidator>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -45,19 +47,41 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *dockContent = new QWidget();
 
     //creamos un QPushButton llamado penBtn, para seleccionar la pluma
-    penBtn = new QPushButton("Pen", dockContent);
+    penBtn = new QToolButton(dockContent);
     //cambiamos su tamaño y posicion
     penBtn->setGeometry(10,50,100,30);
 
+    //aplicar un icono al boton de pen
+    penBtn->setIcon(QIcon(":/icons/icons/brush_icon.svg"));
+    penBtn->setIconSize(QSize(24,24));
+    penBtn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
     //creamos un QPushButton llamado eraserBtn, para seleccionar el borrador
-    eraserBtn = new QPushButton("Eraser", dockContent);
+    eraserBtn = new QToolButton(dockContent);
     //cambiamos su tamaño y posicion, igual que para penBtn
     eraserBtn->setGeometry(10,0,100,30);
 
+    //aplicar un icono al boton de borrador
+    eraserBtn->setIcon(QIcon(":/icons/icons/eraser_icon.svg"));
+    eraserBtn->setIconSize(QSize(24,24));
+    eraserBtn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+
+    //creamos un boton para paintBucket
+    paintBucketBtn = new QToolButton(dockContent);
+
+    //ajustamos algunas propiedades para paintBucketBtn
+    paintBucketBtn->setGeometry(10,200,100,30);
+    paintBucketBtn->setIcon(QIcon(":/icons/icons/paint_bucket_icon.svg"));
+    paintBucketBtn->setIconSize(QSize(24,24));
+
     //creamos un boton para seleccionar el color del lapiz
-    colorBtn = new QPushButton("Color", dockContent);
+    colorBtn = new QPushButton("", dockContent);
     //cambiamos su tamaño y posicion
     colorBtn->setGeometry(10, 100, 100,30);
+
+    //aplicamos icono a el color picker
+    colorBtn->setIcon(QIcon(":/icons/icons/color_picker_icon"));
+    colorBtn->setIconSize(QSize(24,24));
 
     //creamos un boton para abrir la ventana de cambiar el tamaño del lápiz
     penSizeBtn = new QPushButton("Pen Size", dockContent);
@@ -72,29 +96,38 @@ MainWindow::MainWindow(QWidget *parent)
 
         QWidget *contentWidget = new QWidget(dialog);
         QVBoxLayout *layout = new QVBoxLayout(contentWidget);
-
-        QLabel *label = new QLabel(QString("Pen size: %1").arg(canvas->penWidth));
-        QSlider *slider = new QSlider(Qt::Horizontal, contentWidget);
-        slider->setMinimum(1);
-        slider->setMaximum(50);
-        slider->setValue(canvas->penWidth);
+        QLabel *label = new QLabel(QString("Pen size (px): "), dialog);
+        QLineEdit *lineEdit = new QLineEdit(dialog);
+        lineEdit->setValidator(new QDoubleValidator(0.1, 100.0, 2,lineEdit));
+        lineEdit->setText(QString::number(canvas->penWidth));
 
         QPushButton *acceptBtn = new QPushButton("Accept", dialog);
         acceptBtn->setFixedHeight(30);
 
         layout->addWidget(label);
-        layout->addWidget(slider);
+        layout->addWidget(lineEdit);
         layout->addSpacing(10);
         layout->addWidget(acceptBtn, 0, Qt::AlignCenter);
 
-        connect(slider, &QSlider::valueChanged, this, [=](int value){
+       /* connect(slider, &QSlider::valueChanged, this, [=](int value){
             label->setText(QString("Pen size: 1%").arg(value));
         });
-
+*/
         connect(acceptBtn, &QPushButton::clicked, this, [=](){
-            canvas->penWidth = slider->value();
-            dialog->accept();
+            bool ok;
+            int newSize = lineEdit->text().toDouble(&ok);
+            if(ok && newSize >= 1){
+                canvas->penWidth = newSize;
+            }
+            if(newSize >100){
+                QMessageBox msgBox;
+                msgBox.setText("You can't set a number higher than 100");
+                msgBox.setStyleSheet("background-color:#333; color: white;");
+                msgBox.exec();
+                canvas->penWidth = 100;
+            }
 
+            dialog->accept();
         });
 
         contentWidget->setLayout(layout);
@@ -103,6 +136,11 @@ MainWindow::MainWindow(QWidget *parent)
         dialog->setLayout(mainLayout);
 
         dialog->exec();
+    });
+
+    connect(paintBucketBtn, &QToolButton::clicked, this, [this](){
+        canvas->setTool(Canvas::Bucket);
+        updateToolButtons(Canvas:: Bucket);
     });
 
     //conectar el boton de color para conseguir el color escogido, y aplicarcelo al lápiz
@@ -127,12 +165,12 @@ MainWindow::MainWindow(QWidget *parent)
         updateToolButtons(Canvas:: Eraser);
     });
 
-
     QString btnStyle= "background-color: #444; border-radius: 2px";
-    penBtn->setStyleSheet(btnStyle);
+    penBtn->setStyleSheet("background-color: #394352; border-radius: 2px");
     eraserBtn->setStyleSheet(btnStyle);
     colorBtn->setStyleSheet(btnStyle);
     penSizeBtn->setStyleSheet(btnStyle);
+    paintBucketBtn->setStyleSheet("background-color: #444; border-radius: 2px");
 }
 
 MainWindow::~MainWindow()
@@ -187,12 +225,30 @@ void MainWindow::updateToolButtons(Canvas::Tool tool){{
     //seteamos un estilo a los botones
        penBtn->setStyleSheet("background-color: #444; border-radius: 2px");
        eraserBtn->setStyleSheet("background-color: #444; border-radius: 2px");
-       QString activeStyle = "background-color: #555; border-radius: 2px";
+       paintBucketBtn->setStyleSheet("background-color: #444; border-radius: 2px");
+       /*QString activeStyle = R"(
+            QPushButton {
+                    background-color:  #394352;
+                     border-radius: 2px;
+             }
+
+            QPushButton::icon {
+            }
+
+        )";
+    */
+
+       QString activeStyle = "background-color: #394352; border-radius: 2px";
 
        if(tool == Canvas::Pen){
+           penBtn->setStyleSheet("");
            penBtn->setStyleSheet(activeStyle);
        }else if (tool == Canvas::Eraser){
+           eraserBtn->setStyleSheet("");
            eraserBtn->setStyleSheet(activeStyle);
+       }else if(tool == Canvas::Bucket){
+            paintBucketBtn->setStyleSheet("");
+            paintBucketBtn->setStyleSheet(activeStyle);
        }
     }
 }
