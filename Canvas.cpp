@@ -37,24 +37,24 @@ void Canvas::mousePressEvent(QMouseEvent *event){
 void Canvas::mouseMoveEvent(QMouseEvent *event){
 
 
-    if(currentTool == Bucket){
-        return;
-    }
-    if(currentTool == Pen){
-        colorToUse = penColor;
-    }else if (currentTool == Eraser){
-        colorToUse = Qt::white;
-    }
+    if(currentTool != Bucket) {
+        // Aquí dibujas líneas si estás con lápiz o borrador
+        if(currentTool == Pen){
+            colorToUse = penColor;
+        } else if(currentTool == Eraser){
+            colorToUse = Qt::white;
+        }
 
-    if((event->buttons() & Qt::LeftButton) && drawing){
-         QPointF canvasPos = (event->pos() - offset) / scaleFactor;
+        if((event->buttons() & Qt::LeftButton) && drawing){
+            QPointF canvasPos = (event->pos() - offset) / scaleFactor;
 
-        QPainter painter(&image);
-        painter.setRenderHint(QPainter::Antialiasing);
-        painter.setPen(QPen(colorToUse, penWidth, Qt::SolidLine, Qt::RoundCap));
-        painter.drawLine(lastPoint, canvasPos);
-        lastPoint = canvasPos.toPoint();
-        update();
+            QPainter painter(&image);
+            painter.setRenderHint(QPainter::Antialiasing);
+            painter.setPen(QPen(colorToUse, penWidth, Qt::SolidLine, Qt::RoundCap));
+            painter.drawLine(lastPoint, canvasPos);
+            lastPoint = canvasPos.toPoint();
+            update();
+        }
     }
 
     if(event->buttons() & Qt::RightButton){
@@ -96,7 +96,7 @@ void Canvas::paintEvent(QPaintEvent *event){
     int x  = adjustedPos.x();
     int y = adjustedPos.y();
 
-    if (x  >= 0 && x < image.width() && 7 >= 0 && y < image.height()){
+    if (x  >= 0 && x < image.width() && y >= 0 && y < image.height()){
         QColor pixelColor = image.pixelColor(x, y);
         QColor invertedColor(255 - pixelColor.red(),
                                                 255 - pixelColor.green(),
@@ -189,4 +189,6 @@ void Canvas::setImage(const QImage &newImage) {
     update();
 }
 
-void Canvas::setTimeline(FrameTimeLine *timelineDock)
+void Canvas::setTimeline(FrameTimeLine *timelineDock){
+    timeline = timelineDock;
+}

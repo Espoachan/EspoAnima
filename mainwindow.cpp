@@ -137,6 +137,13 @@ MainWindow::MainWindow(QWidget *parent)
                 msgBox.exec();
                 canvas->penWidth = 100;
             }
+            if(canvas->penWidth <= 0){
+                QMessageBox msgBox;
+                msgBox.setText("You can't set a number lower than 1.00");
+                msgBox.setStyleSheet("background-color:#333; color: white;");
+                msgBox.exec();
+                canvas->penWidth = 1.0;
+            }
 
             dialog->accept();
         });

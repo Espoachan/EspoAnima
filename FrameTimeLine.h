@@ -22,6 +22,7 @@ public:
     void setFrame(int index, const QImage& image);
     void addNewFrame();
     int getCurrentIndex() const;
+    QPushButton *addFrameBtn;
 
 signals:
     void frameSelected(int index);
@@ -34,7 +35,7 @@ private:
     QWidget *frameContainer;
 
     void UpdateUI();
-    void switchToFrame();
+    void switchToFrame(int index);
 };
 
 #endif // FRAMETIMELINE_H

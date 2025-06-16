@@ -24,8 +24,10 @@ public:
 
     Tool currentTool = Pen;
 
+        void setTimeline(FrameTimeLine *timeline);
+
     QColor colorToUse;
-    double penWidth;
+    double penWidth = 5.0;
 
     void bucketFill(const QPoint &startPoint, const QColor &fillColor);
 
@@ -41,7 +43,6 @@ private:
 signals:
 
 protected:
-    void setTimeline(FrameTimeLine *timeline);
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;

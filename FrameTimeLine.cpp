@@ -14,26 +14,36 @@ FrameTimeLine::FrameTimeLine(QWidget *parent) : QDockWidget("Timeline", parent),
     scrollArea->setWidgetResizable(true);
     scrollArea->setWidget(frameContainer);
 
-    setWidget(scroolArea);
+    setWidget(scrollArea);
 
     addNewFrame();
+    addFrameBtn = new QPushButton("+", frameContainer);
+    addFrameBtn->setFixedSize(60,60);
+    layout->addWidget(addFrameBtn);
+
+    connect(addFrameBtn,  &QPushButton::clicked, this, &FrameTimeLine::addNewFrame);
 }
 
 void FrameTimeLine::addNewFrame(){
-    QImage newFrame(640,480, QImage::Format_ARGB32);
+    QImage newFrame(1280,720, QImage::Format_ARGB32);
     newFrame.fill(Qt::white);
     frames.append(newFrame);
 
     QPushButton *btn = new QPushButton(QString::number(frames.size()), frameContainer);
     btn->setFixedSize(60,60);
 
-    connect(btn, &QPushButton::clicked, this, [=]() {
+   // int index = frameButtons.size();
+
+    connect(btn, &QPushButton::clicked,  this, [=]() {
         switchToFrame(frameButtons.indexOf(btn));
     });
 
     frameButtons.append(btn);
     layout->addWidget(btn);
+
+    currentIndex = frames.size() - 1;
     UpdateUI();
+    emit frameSelected(currentIndex);
 }
 
 void FrameTimeLine::switchToFrame(int index) {
