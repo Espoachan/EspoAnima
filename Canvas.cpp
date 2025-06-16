@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QRgb>
+#include <FrameTimeLine.h>
 #include <QStack>
 
 Canvas::Canvas(QWidget *parent)
@@ -70,11 +71,16 @@ void Canvas::mouseMoveEvent(QMouseEvent *event){
 void Canvas::mouseReleaseEvent(QMouseEvent *event) {
     if (event->button() == Qt::LeftButton && drawing){
         drawing = false;
+
+        if(timeline){
+            timeline->setFrame(timeline->getCurrentIndex(), getImage());
+        }
     }
 
     if(event->button() == Qt::RightButton){
         setCursor(Qt::ArrowCursor);
     }
+
 }
 
 void Canvas::paintEvent(QPaintEvent *event){
@@ -171,6 +177,16 @@ void Canvas::bucketFill(const QPoint &startPoint, const QColor &fillColor)
             stack.push(QPoint(pt.x(), pt.y() - 1));
         }
     }
-
     update();
 }
+
+QImage Canvas::getImage() const {
+    return image;
+}
+
+void Canvas::setImage(const QImage &newImage) {
+    image = newImage;
+    update();
+}
+
+void Canvas::setTimeline(FrameTimeLine *timelineDock)

@@ -8,10 +8,13 @@
 #include <QToolButton>
 #include <QLineEdit>
 #include <QDoubleValidator>
+#include <QShortcut>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+
+
     //creamos la pantalla
     QScreen *screen  = QGuiApplication::primaryScreen();
     //guardamos el tamaño de la pantalla en "screenGeomtry"
@@ -34,6 +37,14 @@ MainWindow::MainWindow(QWidget *parent)
     //seteamos canvas como centralWidget
     setCentralWidget(canvas);
 
+    timeline = new FrameTimeLine(this);
+    addDockWidget(Qt::BottomDockWidgetArea, timeline);
+
+    connect(timeline, &FrameTimeLine::frameSelected, this, [=](int index){
+        canvas->setImage(timeline->currentFrame());
+    });
+
+    canvas->setTimeline(timeline);
     //creamos un dock que se llame "tools"
     toolDock = new QDockWidget("Tools", this);
     //seteamos las areas permitidas para el dock (izquierda y derecha)
@@ -171,6 +182,25 @@ MainWindow::MainWindow(QWidget *parent)
     colorBtn->setStyleSheet(btnStyle);
     penSizeBtn->setStyleSheet(btnStyle);
     paintBucketBtn->setStyleSheet("background-color: #444; border-radius: 2px");
+
+
+    shortcutPen = new QShortcut(QKeySequence(Qt::Key_B), this);
+    connect(shortcutPen, &QShortcut::activated, this, [this]() {
+    canvas->setTool(Canvas::Pen);
+    updateToolButtons(Canvas::Pen);
+    });
+
+    shortcutPen = new QShortcut(QKeySequence(Qt::Key_E), this);
+    connect(shortcutPen, &QShortcut::activated, this, [this]() {
+    canvas->setTool(Canvas::Eraser);
+    updateToolButtons(Canvas::Eraser);
+    });
+
+    shortcutPen = new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_G), this);
+    connect(shortcutPen, &QShortcut::activated, this, [this]() {
+    canvas->setTool(Canvas::Bucket);
+    updateToolButtons(Canvas::Bucket);
+    });
 }
 
 MainWindow::~MainWindow()

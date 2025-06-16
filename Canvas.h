@@ -1,6 +1,7 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
+#include "FrameTimeLine.h"
 #include <QWidget>
 
 class Canvas : public QWidget
@@ -15,6 +16,8 @@ public:
     QPointF lastPanPoint;
     void clearCanvas();
 
+    QImage getImage() const;
+    void setImage(const QImage &newImage);
     QPoint currentMousePos;
 
     enum Tool { Pen, Eraser, Bucket};
@@ -33,10 +36,12 @@ public:
     explicit Canvas(QWidget *parent = nullptr);
 
 private:
+    FrameTimeLine *timeline = nullptr;
 
 signals:
 
 protected:
+    void setTimeline(FrameTimeLine *timeline);
     void paintEvent(QPaintEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;

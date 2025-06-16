@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QScreen>
+#include <QShortcut>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QLabel>
@@ -13,6 +14,7 @@
 #include <QMessageBox>
 #include "Canvas.h"
 #include <QToolButton>
+#include <FrameTimeLine.h>
 
 
 QT_BEGIN_NAMESPACE
@@ -35,12 +37,14 @@ public:
     void exportFn();
     void updateToolButtons(Canvas::Tool tool);
 
+    FrameTimeLine *timeline;
 
     QToolButton *penBtn;
     QPushButton *colorBtn;
     QToolButton *eraserBtn;
     QPushButton *penSizeBtn;
     QToolButton *paintBucketBtn;
+    QShortcut *shortcutPen;
 
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
