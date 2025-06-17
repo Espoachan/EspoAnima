@@ -1,5 +1,5 @@
-#include "menubarhelper.h"
-#include <mainwindow.h>
+#include "headers/menubarhelper.h"
+#include <headers/mainwindow.h>
 #include <QMessageBox>
 
 QMenuBar* menuBarHelper::createMenuBar(QMainWindow *parent){

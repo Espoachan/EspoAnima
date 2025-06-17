@@ -1,9 +1,10 @@
-#include "Canvas.h"
+#include "headers/Canvas.h"
+#include "headers/FrameTimeLine.h"
+#include "headers/NewProjectDialog.h"
 #include <QMouseEvent>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QRgb>
-#include <FrameTimeLine.h>
 #include <QStack>
 
 Canvas::Canvas(QWidget *parent)
@@ -191,4 +192,11 @@ void Canvas::setImage(const QImage &newImage) {
 
 void Canvas::setTimeline(FrameTimeLine *timelineDock){
     timeline = timelineDock;
+}
+
+void Canvas::initializeNewCanvas(int width, int height, const QColor &bgColor)
+{
+    image = QImage(width, height, QImage::Format_ARGB32);
+    image.fill(bgColor);
+    update();
 }

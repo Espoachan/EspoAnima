@@ -30,6 +30,8 @@ public:
     double penWidth = 5.0;
 
     void bucketFill(const QPoint &startPoint, const QColor &fillColor);
+    void initializeNewCanvas(int width, int height, const QColor& bgColor);
+
 
     void setTool(Tool tool);
 

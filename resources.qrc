@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/icons">
-        <file>icons/brush_icon.svg</file>
-        <file>icons/color_picker_icon.svg</file>
-        <file>icons/eraser_icon.svg</file>
-        <file>icons/paint_bucket_icon.svg</file>
-    </qresource>
-</RCC>

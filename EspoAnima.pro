@@ -7,12 +7,16 @@ CONFIG += c++17
 
 SOURCES += \
     Canvas.cpp \
+    FrameTimeLine.cpp \
+    NewProjectDialog.cpp \
     main.cpp \
     mainwindow.cpp \
     menubarhelper.cpp
 
 HEADERS += \
     Canvas.h \
+    FrameTimeLine.h \
+    NewProjectDialog.h \
     mainwindow.h \
     menubarhelper.h
 

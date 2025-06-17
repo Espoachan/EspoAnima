@@ -1,8 +1,9 @@
-#include "FrameTimeLine.h"
+#include "headers/FrameTimeLine.h"
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QPixmap>
 #include <QPainter>
+#include "headers/NewProjectDialog.h"
 
 FrameTimeLine::FrameTimeLine(QWidget *parent) : QDockWidget("Timeline", parent), currentIndex(0){
     frameContainer = new QWidget;
@@ -16,17 +17,41 @@ FrameTimeLine::FrameTimeLine(QWidget *parent) : QDockWidget("Timeline", parent),
 
     setWidget(scrollArea);
 
-    addNewFrame();
     addFrameBtn = new QPushButton("+", frameContainer);
     addFrameBtn->setFixedSize(60,60);
     layout->addWidget(addFrameBtn);
 
-    connect(addFrameBtn,  &QPushButton::clicked, this, &FrameTimeLine::addNewFrame);
+    NewProjectDialog dialog;
+    int width = dialog.getWidth();
+    int height = dialog.getHeight();
+    QColor bgColor = dialog.getBackgroundColor();
+    QString projectName = dialog.getProjectName();
+    int fps = dialog.getFps();
+    connect(addFrameBtn, &QPushButton::clicked, this, [=]() {
+        addNewFrame(width, height, bgColor);
+    });
+
 }
 
-void FrameTimeLine::addNewFrame(){
-    QImage newFrame(1280,720, QImage::Format_ARGB32);
-    newFrame.fill(Qt::white);
+void FrameTimeLine::setCurrentWidth(int w) {
+    currentWidth = w;
+}
+
+void FrameTimeLine::setCurrentHeight(int h) {
+    currentHeight = h;
+}
+
+void FrameTimeLine::setCurrentBgColor(QColor c) {
+    currentBgColor = c;
+}
+
+void FrameTimeLine::addNewFrame() {
+    addNewFrame(currentWidth, currentHeight, currentBgColor);
+}
+
+void FrameTimeLine::addNewFrame(int width, int height, QColor color){
+    QImage newFrame(width,height, QImage::Format_ARGB32);
+    newFrame.fill(color);
     frames.append(newFrame);
 
     QPushButton *btn = new QPushButton(QString::number(frames.size()), frameContainer);
@@ -74,4 +99,17 @@ void FrameTimeLine::setFrame(int index, const QImage& image) {
 }
 int FrameTimeLine::getCurrentIndex() const {
     return currentIndex;
+}
+
+void FrameTimeLine::clear(){
+    for (QPushButton* btn : frameButtons){
+        layout->removeWidget(btn);
+        btn->deleteLater();
+    }
+
+    frameButtons.clear();
+    frames.clear();
+    currentIndex = 0;
+
+    UpdateUI();
 }

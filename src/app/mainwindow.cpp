@@ -1,14 +1,16 @@
-#include "mainwindow.h"
-#include "menubarhelper.h"
+#include "headers/mainwindow.h"
+#include "headers/menubarhelper.h"
 #include <QDockWidget>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
-#include "Canvas.h"
+#include "headers/Canvas.h"
 #include <QToolButton>
 #include <QLineEdit>
 #include <QDoubleValidator>
 #include <QShortcut>
+#include <QInputDialog>
+#include "headers/NewProjectDialog.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -63,7 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     penBtn->setGeometry(10,50,100,30);
 
     //aplicar un icono al boton de pen
-    penBtn->setIcon(QIcon(":/icons/icons/brush_icon.svg"));
+    penBtn->setIcon(QIcon(":/data/icons/brush_icon.svg"));
     penBtn->setIconSize(QSize(24,24));
     penBtn->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
@@ -73,7 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
     eraserBtn->setGeometry(10,0,100,30);
 
     //aplicar un icono al boton de borrador
-    eraserBtn->setIcon(QIcon(":/icons/icons/eraser_icon.svg"));
+    eraserBtn->setIcon(QIcon(":/data/icons/eraser_icon.svg"));
     eraserBtn->setIconSize(QSize(24,24));
     eraserBtn->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
@@ -82,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //ajustamos algunas propiedades para paintBucketBtn
     paintBucketBtn->setGeometry(10,200,100,30);
-    paintBucketBtn->setIcon(QIcon(":/icons/icons/paint_bucket_icon.svg"));
+    paintBucketBtn->setIcon(QIcon(":/data/icons/paint_bucket_icon.svg"));
     paintBucketBtn->setIconSize(QSize(24,24));
 
     //creamos un boton para seleccionar el color del lapiz
@@ -91,7 +93,7 @@ MainWindow::MainWindow(QWidget *parent)
     colorBtn->setGeometry(10, 100, 100,30);
 
     //aplicamos icono a el color picker
-    colorBtn->setIcon(QIcon(":/icons/icons/color_picker_icon"));
+    colorBtn->setIcon(QIcon(":/data/icons/color_picker_icon"));
     colorBtn->setIconSize(QSize(24,24));
 
     //creamos un boton para abrir la ventana de cambiar el tamaño del lápiz
@@ -215,12 +217,30 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::createNewFile(){
-    auto answer = QMessageBox::question(this, "New File", "Are you sure you want to create a new file? You are gonna lose anything you have not saved");
+    auto confirm = QMessageBox::question(this, "New File", "Are you sure you want to create a new file? Unsaved work will be lost");
 
-    if(answer == QMessageBox::Yes){
-        canvas->clearCanvas();
-    }else{
+    if(confirm != QMessageBox::Yes){
         return;
+    }
+
+    NewProjectDialog dialog(this);
+    if(dialog.exec() == QDialog::Accepted){
+        int width = dialog.getWidth();
+        int height = dialog.getHeight();
+        QColor bgColor = dialog.getBackgroundColor();
+        QString projectName = dialog.getProjectName();
+        int fps = dialog.getFps();
+
+        timeline->clear();
+
+        timeline->setCurrentBgColor(bgColor);
+        timeline->setCurrentHeight(height);
+        timeline->setCurrentWidth(width);
+
+        canvas->initializeNewCanvas(width, height, bgColor);
+        timeline->addNewFrame(width, height, bgColor);
+        canvas->update();
+
     }
 }
 

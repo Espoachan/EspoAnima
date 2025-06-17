@@ -15,7 +15,7 @@
 #include "Canvas.h"
 #include <QToolButton>
 #include <FrameTimeLine.h>
-
+#include <QString>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -38,7 +38,8 @@ public:
     void updateToolButtons(Canvas::Tool tool);
 
     FrameTimeLine *timeline;
-
+    QString resolutionAnswer1;
+    QString resolutionAnswer2;
     QToolButton *penBtn;
     QPushButton *colorBtn;
     QToolButton *eraserBtn;
