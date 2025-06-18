@@ -10,9 +10,10 @@
 Canvas::Canvas(QWidget *parent)
     : QWidget{parent}
 {
+ /*
     image = QImage(1280, 720, QImage::Format_ARGB32);
     image.fill(Qt::white);
-
+*/
     setFocusPolicy(Qt::StrongFocus);
 }
 void Canvas::mousePressEvent(QMouseEvent *event){

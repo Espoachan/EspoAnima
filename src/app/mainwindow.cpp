@@ -36,11 +36,20 @@ MainWindow::MainWindow(QWidget *parent)
     canvas = new Canvas(this);
         //centralWidget = new QWidget(this);
 
+    int defaultWidth = 1280;
+    int defaultHeight = 720;
+    QColor defaultBgColor = Qt::white;
+
+    //timeline = new FrameTimeLine(this);
+
+    canvas->initializeNewCanvas(defaultWidth, defaultHeight, defaultBgColor);
+
     //seteamos canvas como centralWidget
     setCentralWidget(canvas);
 
     timeline = new FrameTimeLine(this);
     addDockWidget(Qt::BottomDockWidgetArea, timeline);
+    timeline->addNewFrame(defaultWidth, defaultHeight, defaultBgColor);
 
     connect(timeline, &FrameTimeLine::frameSelected, this, [=](int index){
         canvas->setImage(timeline->currentFrame());
@@ -205,7 +214,7 @@ MainWindow::MainWindow(QWidget *parent)
     updateToolButtons(Canvas::Eraser);
     });
 
-    shortcutPen = new QShortcut(QKeySequence(Qt::SHIFT + Qt::Key_G), this);
+    shortcutPen = new QShortcut(QKeySequence(Qt::SHIFT | Qt::Key_G), this);
     connect(shortcutPen, &QShortcut::activated, this, [this]() {
     canvas->setTool(Canvas::Bucket);
     updateToolButtons(Canvas::Bucket);
@@ -228,7 +237,7 @@ void MainWindow::createNewFile(){
         int width = dialog.getWidth();
         int height = dialog.getHeight();
         QColor bgColor = dialog.getBackgroundColor();
-        QString projectName = dialog.getProjectName();
+        projectName = dialog.getProjectName();
         int fps = dialog.getFps();
 
         timeline->clear();
@@ -264,7 +273,7 @@ void MainWindow::openToolsDock(){
 }
 
 void MainWindow::exportFn(){
-    QString fileName = QFileDialog::getSaveFileName(this, "Export image",  "", "PNG (*.png)");
+    QString fileName = QFileDialog::getSaveFileName(this, "Export image",  projectName, "PNG (*.png)");
     if (!fileName.isEmpty()){
         if(!fileName.endsWith(".png", Qt::CaseInsensitive)){
             fileName += ".png";

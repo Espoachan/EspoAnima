@@ -20,16 +20,18 @@ public:
     int getFps() const;
     QColor getBackgroundColor() const;
 
-private slots:
-    void chooseColor();
-
-private:
     QLineEdit *nameEdit;
     QSpinBox *widthSpin;
     QSpinBox *heightSpin;
     QSpinBox *fpsSpin;
     QPushButton *colorButton;
     QColor backgroundColor;
+
+private slots:
+    void chooseColor();
+
+private:
+
 };
 
 #endif // NEWPROJECTDIALOG_H

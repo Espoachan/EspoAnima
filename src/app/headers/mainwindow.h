@@ -46,6 +46,7 @@ public:
     QPushButton *penSizeBtn;
     QToolButton *paintBucketBtn;
     QShortcut *shortcutPen;
+    QString projectName = "Untitled Project";
 
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();

@@ -17,20 +17,20 @@ FrameTimeLine::FrameTimeLine(QWidget *parent) : QDockWidget("Timeline", parent),
 
     setWidget(scrollArea);
 
+
     addFrameBtn = new QPushButton("+", frameContainer);
     addFrameBtn->setFixedSize(60,60);
     layout->addWidget(addFrameBtn);
 
-    NewProjectDialog dialog;
-    int width = dialog.getWidth();
-    int height = dialog.getHeight();
-    QColor bgColor = dialog.getBackgroundColor();
-    QString projectName = dialog.getProjectName();
-    int fps = dialog.getFps();
+    //NewProjectDialog dialog;
+    int width = 1280;
+    int height = 720;
+    QColor bgColor = Qt::white; // Default background color
+    QString projectName = "untitled project";
+    int fps = 24;
     connect(addFrameBtn, &QPushButton::clicked, this, [=]() {
         addNewFrame(width, height, bgColor);
     });
-
 }
 
 void FrameTimeLine::setCurrentWidth(int w) {
@@ -49,11 +49,12 @@ void FrameTimeLine::addNewFrame() {
     addNewFrame(currentWidth, currentHeight, currentBgColor);
 }
 
-void FrameTimeLine::addNewFrame(int width, int height, QColor color){
-    QImage newFrame(width,height, QImage::Format_ARGB32);
-    newFrame.fill(color);
-    frames.append(newFrame);
+void FrameTimeLine::addNewFrame(int width, int height, QColor color) {
 
+    QImage newFrame(currentWidth,currentHeight, QImage::Format_ARGB32);
+    newFrame.fill(currentBgColor);
+    frames.append(newFrame);
+    
     QPushButton *btn = new QPushButton(QString::number(frames.size()), frameContainer);
     btn->setFixedSize(60,60);
 
