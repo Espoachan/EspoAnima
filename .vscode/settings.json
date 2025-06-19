@@ -1,6 +1,10 @@
 {
     "C_Cpp.default.compilerPath": "/bin/g++",
     "files.associations": {
-        "array": "cpp"
+        "*.h": "cpp",
+        "array": "cpp",
+        "qobject": "cpp",
+        "qpushbutton": "cpp",
+        "qdialog": "cpp"
     }
 }
