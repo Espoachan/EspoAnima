@@ -1,15 +1,14 @@
 #ifndef PREFERENCES_H
 #define PREFERENCES_H
 
-#include <QObject>
+#include <QDialog>
 #include <QPushButton>
-#include <QMessageBox>
 
-class Preferences : public QObject {
+class Preferences : public QDialog {
     Q_OBJECT
 
 public:
-    explicit Preferences(QObject *parent = nullptr);
+    explicit Preferences(QWidget *parent = nullptr);
 
 signals:
 
