@@ -13,7 +13,9 @@ QMenuBar* menuBarHelper::createMenuBar(QMainWindow *parent){
     QMenu *menuTools = new QMenu("Tools", parent);
     //creamos otro llamado "Help"
     QMenu *menuHelp = new QMenu("Help", parent);
-
+    //creamos un menu llamado "Edit"
+    QMenu *menuEdit = new QMenu("Edit", parent);
+    
     //agregamos un QAction a el menu "Files", esta accion se llama "New File"
     QAction *newFile = menuFiles->addAction("New File");
     QAction *_toolsDock = menuTools->addAction("Tools Dock");
@@ -24,6 +26,7 @@ QMenuBar* menuBarHelper::createMenuBar(QMainWindow *parent){
     QAction *save = menuFiles->addAction("Save");
     QAction *openFile = menuFiles->addAction("Open File");
     QAction *_export = menuFiles->addAction("Export");
+    QAction *preferences = menuEdit->addAction("Preferences");
 
     //le decimos al compilador que las acciones no se usan en ningun momento aproposito
     Q_UNUSED(openFile);
@@ -39,8 +42,12 @@ QMenuBar* menuBarHelper::createMenuBar(QMainWindow *parent){
 
     //mostramos el menuFiles
     menuBar->addMenu(menuFiles);
+    //agregamos el menu "Help" a la barra de menu
     menuBar->addMenu(menuHelp);
+    //agregamos el menu "Tools" a la barra de menu
     menuBar->addMenu(menuTools);
+    //agregamos el menu "Edit" a la barra de menu
+    menuBar->addMenu(menuEdit);
 
     return menuBar;
 }

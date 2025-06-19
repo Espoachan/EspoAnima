@@ -44,6 +44,7 @@ void Canvas::mouseMoveEvent(QMouseEvent *event){
         if(currentTool == Pen){
             colorToUse = penColor;
         } else if(currentTool == Eraser){
+            
             colorToUse = Qt::white;
         }
 

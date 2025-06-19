@@ -11,6 +11,7 @@
 #include <QShortcut>
 #include <QInputDialog>
 #include "headers/NewProjectDialog.h"
+#include "headers/Preferences.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -35,13 +36,13 @@ MainWindow::MainWindow(QWidget *parent)
     //creamos un central widget para canvas
     canvas = new Canvas(this);
         //centralWidget = new QWidget(this);
+    preferences = new Preferences(this);
 
     int defaultWidth = 1280;
     int defaultHeight = 720;
     QColor defaultBgColor = Qt::white;
 
     //timeline = new FrameTimeLine(this);
-
     canvas->initializeNewCanvas(defaultWidth, defaultHeight, defaultBgColor);
 
     //seteamos canvas como centralWidget
@@ -254,7 +255,8 @@ void MainWindow::createNewFile(){
 }
 
 void MainWindow::about(){
-    QMessageBox::information(this, "About", "EspoAnima is an animation and draw software!!");
+    QMessageBox::information(this, "About", "Nothing to see here, just a simple paint app made with Qt. :)",
+                             QMessageBox::Ok);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event){

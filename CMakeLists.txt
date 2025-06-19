@@ -36,3 +36,5 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # Enlazar con Qt6
 target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
+
+

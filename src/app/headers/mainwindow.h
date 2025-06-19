@@ -58,5 +58,6 @@ private:
     QWidget *centralWidget;
     QDockWidget *toolDock;
     Canvas *canvas; // agrégalo como miembro privado
+    Preferences *preferences;
 };
 #endif // MAINWINDOW_H
