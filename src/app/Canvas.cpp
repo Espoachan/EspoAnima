@@ -44,17 +44,25 @@ void Canvas::mouseMoveEvent(QMouseEvent *event){
         if(currentTool == Pen){
             colorToUse = penColor;
         } else if(currentTool == Eraser){
-            
-            colorToUse = Qt::white;
+            colorToUse = Qt::transparent;
         }
 
         if((event->buttons() & Qt::LeftButton) && drawing){
             QPointF canvasPos = (event->pos() - offset) / scaleFactor;
 
             QPainter painter(&image);
+
             painter.setRenderHint(QPainter::Antialiasing);
-            painter.setPen(QPen(colorToUse, penWidth, Qt::SolidLine, Qt::RoundCap));
-            painter.drawLine(lastPoint, canvasPos);
+            if(currentTool == Eraser){
+                // Si es la herramienta de borrado, usamos un color transparente
+                // para borrar el trazo
+                painter.setCompositionMode(QPainter::CompositionMode_Clear);
+                painter.setPen(QPen(Qt::transparent, penWidth, Qt::SolidLine, Qt::RoundCap));
+            } else {
+                // Si es lápiz, usamos el color seleccionado
+                painter.setPen(QPen(colorToUse, penWidth, Qt::SolidLine, Qt::RoundCap));
+            }
+                painter.drawLine(lastPoint, canvasPos);
             lastPoint = canvasPos.toPoint();
             update();
         }
@@ -201,4 +209,21 @@ void Canvas::initializeNewCanvas(int width, int height, const QColor &bgColor)
     image = QImage(width, height, QImage::Format_ARGB32);
     image.fill(bgColor);
     update();
+}
+
+void Canvas::drawBackground(QPainter &painter, const QRect &area)
+{
+
+    int titleSize = 10;
+    QColor lightgray(200, 200, 200);
+    QColor darkgray(150, 150, 150);
+
+    for (int y = 0; y < area.height(); y += titleSize) {
+        for (int x = 0; x < area.width(); x += titleSize) {
+            bool isDark = ((x / titleSize) + (y / titleSize)) % 2 == 0;
+            painter.fillRect(x, y, titleSize, titleSize,
+                             isDark ? darkgray : lightgray);
+        }
+    }
+    
 }

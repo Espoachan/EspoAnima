@@ -16,6 +16,8 @@ public:
     QPointF lastPanPoint;
     void clearCanvas();
 
+    void drawBackground(QPainter &painter, const QRect &area);
+
     QImage getImage() const;
     void setImage(const QImage &newImage);
     QPoint currentMousePos;
@@ -26,7 +28,7 @@ public:
 
         void setTimeline(FrameTimeLine *timeline);
 
-    QColor colorToUse;
+    QColor colorToUse = Qt::black;
     double penWidth = 5.0;
 
     void bucketFill(const QPoint &startPoint, const QColor &fillColor);
