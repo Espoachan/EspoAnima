@@ -1,7 +1,9 @@
 #include "headers/Preferences.h"
+#include <QFormLayout>
+#include <QDialogButtonBox>
 
-Preferences::Preferences(QWidget *parent)
-    : QDialog(parent)
+
+Preferences::Preferences(QWidget *parent) : QDialog(parent)
 {
     setWindowTitle("Preferences");
     setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint | Qt::WindowTitleHint);
@@ -17,6 +19,18 @@ Preferences::Preferences(QWidget *parent)
     closeButton->setStyleSheet("background-color: #444; color: white; border-radius: 2px;");
     closeButton->setToolTip("Close Preferences");
     connect(closeButton, &QPushButton::clicked, this, &Preferences::close);
-    closeButton->setGeometry(100, 100, 80, 30);
+    closeButton->setGeometry(100, 400, 80, 30);
+
+    QFormLayout *form = new QFormLayout;
+    form->addRow("", closeButton);
+
+    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    connect(buttons, &QDialogButtonBox::accepted, this, &Preferences::accept);
+    connect(buttons, &QDialogButtonBox::rejected, this, &Preferences::reject);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->addLayout(form);
+    mainLayout->addWidget(buttons);
+    setLayout(mainLayout);
 }
 

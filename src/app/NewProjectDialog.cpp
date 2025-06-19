@@ -5,6 +5,12 @@
 
 NewProjectDialog::NewProjectDialog(QWidget *parent) : QDialog(parent), backgroundColor(Qt::white)
 {
+    // Set the dialog properties
+    setMinimumSize(400, 300);
+    setGeometry(100, 100, 400, 300);
+    setStyleSheet("background-color: #222; color: white;");
+    setModal(true);
+    setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint | Qt::WindowTitleHint);
     setWindowTitle("New Project");
 
     nameEdit = new QLineEdit(this);
