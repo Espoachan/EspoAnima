@@ -320,3 +320,7 @@ void MainWindow::updateToolButtons(Canvas::Tool tool){{
        }
     }
 }
+
+void MainWindow::openPreferences(){
+    preferences->exec();
+}
