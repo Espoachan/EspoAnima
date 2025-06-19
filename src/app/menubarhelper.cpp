@@ -39,7 +39,7 @@ QMenuBar* menuBarHelper::createMenuBar(QMainWindow *parent){
     QObject::connect(about, &QAction::triggered, static_cast<MainWindow*>(parent), &MainWindow::about);
     QObject::connect(_toolsDock, &QAction::triggered, [=](){static_cast<MainWindow*>(parent)->openToolsDock();});
     QObject::connect(_export, &QAction::triggered, [=](){static_cast<MainWindow*>(parent)->exportFn();});
-
+    QObject::connect(preferences, &QAction::triggered, [=](){static_cast<MainWindow*>(parent)->openPreferences();});
     //mostramos el menuFiles
     menuBar->addMenu(menuFiles);
     //agregamos el menu "Help" a la barra de menu
