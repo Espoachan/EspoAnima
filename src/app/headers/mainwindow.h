@@ -16,6 +16,7 @@
 #include <QToolButton>
 #include <FrameTimeLine.h>
 #include <QString>
+#include <Preferences.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -31,13 +32,20 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 
 public:
+//funciones
     void createNewFile();
     void about();
     void openToolsDock();
     void exportFn();
     void updateToolButtons(Canvas::Tool tool);
+    void openPreferences();
+//
 
+//estas son de otros.h
     FrameTimeLine *timeline;
+    Preferences *preferences;
+
+//
     QString resolutionAnswer1;
     QString resolutionAnswer2;
     QToolButton *penBtn;
@@ -47,6 +55,8 @@ public:
     QToolButton *paintBucketBtn;
     QShortcut *shortcutPen;
     QString projectName = "Untitled Project";
+
+
 
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -58,6 +68,5 @@ private:
     QWidget *centralWidget;
     QDockWidget *toolDock;
     Canvas *canvas; // agrégalo como miembro privado
-    Preferences *preferences;
 };
 #endif // MAINWINDOW_H
