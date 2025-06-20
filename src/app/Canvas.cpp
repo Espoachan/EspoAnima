@@ -51,8 +51,6 @@ void Canvas::mouseMoveEvent(QMouseEvent *event){
             QPointF canvasPos = (event->pos() - offset) / scaleFactor;
 
             QPainter painter(&image);
-
-            painter.setRenderHint(QPainter::Antialiasing);
             if(currentTool == Eraser){
                 // Si es la herramienta de borrado, usamos un color transparente
                 // para borrar el trazo
@@ -60,6 +58,7 @@ void Canvas::mouseMoveEvent(QMouseEvent *event){
                 painter.setPen(QPen(Qt::transparent, penWidth, Qt::SolidLine, Qt::RoundCap));
             } else {
                 // Si es lápiz, usamos el color seleccionado
+                painter.setRenderHint(QPainter::Antialiasing);
                 painter.setPen(QPen(colorToUse, penWidth, Qt::SolidLine, Qt::RoundCap));
             }
                 painter.drawLine(lastPoint, canvasPos);
