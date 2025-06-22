@@ -12,6 +12,8 @@
 #include <QInputDialog>
 #include "headers/NewProjectDialog.h"
 #include "headers/Preferences.h"
+#include "headers/globals.h"
+#include <QGraphicsDropShadowEffect>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -57,11 +59,18 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     canvas->setTimeline(timeline);
+    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect;
+    effect->setBlurRadius(5);
+    effect->setXOffset(2);
+    effect->setYOffset(2);
+    effect->setColor(Qt::black);
     //creamos un dock que se llame "tools"
     toolDock = new QDockWidget("Tools", this);
+    toolDock->setStyleSheet("");
+    toolDock->setGraphicsEffect(effect);
     //seteamos las areas permitidas para el dock (izquierda y derecha)
     toolDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    this->setStyleSheet("background-color: #222;  color: white;");
+    this->setStyleSheet("");
     int toolDockHeight = toolDock->height();
     toolDock->resize(300, toolDockHeight);
     toolDock->setMinimumWidth(100);
@@ -77,7 +86,7 @@ MainWindow::MainWindow(QWidget *parent)
     //aplicar un icono al boton de pen
     penBtn->setIcon(QIcon(":/data/icons/brush_icon.svg"));
     penBtn->setIconSize(QSize(24,24));
-    penBtn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    //penBtn->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
     //creamos un QPushButton llamado eraserBtn, para seleccionar el borrador
     eraserBtn = new QToolButton(dockContent);
@@ -87,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent)
     //aplicar un icono al boton de borrador
     eraserBtn->setIcon(QIcon(":/data/icons/eraser_icon.svg"));
     eraserBtn->setIconSize(QSize(24,24));
-    eraserBtn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    //eraserBtn->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
     //creamos un boton para paintBucket
     paintBucketBtn = new QToolButton(dockContent);
@@ -145,14 +154,14 @@ MainWindow::MainWindow(QWidget *parent)
             if(newSize >100){
                 QMessageBox msgBox;
                 msgBox.setText("You can't set a number higher than 100");
-                msgBox.setStyleSheet("background-color:#333; color: white;");
+                msgBox.setStyleSheet("");
                 msgBox.exec();
                 canvas->penWidth = 100;
             }
             if(canvas->penWidth <= 0){
                 QMessageBox msgBox;
                 msgBox.setText("You can't set a number lower than 1.00");
-                msgBox.setStyleSheet("background-color:#333; color: white;");
+                msgBox.setStyleSheet("");
                 msgBox.exec();
                 canvas->penWidth = 1.0;
             }
@@ -195,12 +204,11 @@ MainWindow::MainWindow(QWidget *parent)
         updateToolButtons(Canvas:: Eraser);
     });
 
-    QString btnStyle= "background-color: #444; border-radius: 2px";
-    penBtn->setStyleSheet("background-color: #394352; border-radius: 2px");
-    eraserBtn->setStyleSheet(btnStyle);
-    colorBtn->setStyleSheet(btnStyle);
-    penSizeBtn->setStyleSheet(btnStyle);
-    paintBucketBtn->setStyleSheet("background-color: #444; border-radius: 2px");
+    penBtn->setStyleSheet("");
+    eraserBtn->setStyleSheet("");
+    colorBtn->setStyleSheet("");
+    penSizeBtn->setStyleSheet("");
+    paintBucketBtn->setStyleSheet("");
 
 
     shortcutPen = new QShortcut(QKeySequence(Qt::Key_B), this);
@@ -291,9 +299,9 @@ void MainWindow::exportFn(){
 
 void MainWindow::updateToolButtons(Canvas::Tool tool){{
     //seteamos un estilo a los botones
-       penBtn->setStyleSheet("background-color: #444; border-radius: 2px");
-       eraserBtn->setStyleSheet("background-color: #444; border-radius: 2px");
-       paintBucketBtn->setStyleSheet("background-color: #444; border-radius: 2px");
+       penBtn->setStyleSheet("");
+       eraserBtn->setStyleSheet("");
+       paintBucketBtn->setStyleSheet("");
        /*QString activeStyle = R"(
             QPushButton {
                     background-color:  #394352;
@@ -310,13 +318,13 @@ void MainWindow::updateToolButtons(Canvas::Tool tool){{
 
        if(tool == Canvas::Pen){
            penBtn->setStyleSheet("");
-           penBtn->setStyleSheet(activeStyle);
+           penBtn->setStyleSheet("");
        }else if (tool == Canvas::Eraser){
            eraserBtn->setStyleSheet("");
-           eraserBtn->setStyleSheet(activeStyle);
+           eraserBtn->setStyleSheet("");
        }else if(tool == Canvas::Bucket){
             paintBucketBtn->setStyleSheet("");
-            paintBucketBtn->setStyleSheet(activeStyle);
+            paintBucketBtn->setStyleSheet("");
        }
     }
 }

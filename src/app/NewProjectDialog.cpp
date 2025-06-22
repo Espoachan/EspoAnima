@@ -2,13 +2,14 @@
 #include <QFormLayout>
 #include <QDialogButtonBox>
 #include <QColorDialog>
+#include "headers/globals.h"
 
 NewProjectDialog::NewProjectDialog(QWidget *parent) : QDialog(parent), backgroundColor(Qt::white)
 {
     // Set the dialog properties
     setMinimumSize(400, 300);
     setGeometry(100, 100, 400, 300);
-    setStyleSheet("background-color: #222; color: white;");
+    setStyleSheet("");
     setModal(true);
     setWindowFlags(Qt::Dialog | Qt::WindowCloseButtonHint | Qt::WindowTitleHint);
     setWindowTitle("New Project");
