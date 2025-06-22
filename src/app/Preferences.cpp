@@ -2,7 +2,6 @@
 #include <QFormLayout>
 #include <QDialogButtonBox>
 
-
 Preferences::Preferences(QWidget *parent) : QDialog(parent)
 {
     setWindowTitle("Preferences");
@@ -12,14 +11,14 @@ Preferences::Preferences(QWidget *parent) : QDialog(parent)
     setGeometry(100, 100, 600, 400);
     setStyleSheet("background-color: #222; color: white;");
 
-    QPushButton *closeButton = new QPushButton("Close", this);
-    closeButton->setStyleSheet("background-color: #444; color: white; border-radius: 2px;");
-    closeButton->setToolTip("Close Preferences");
-    connect(closeButton, &QPushButton::clicked, this, &Preferences::close);
-    closeButton->setGeometry(100, 400, 80, 30);
+    QPushButton *themeButton = new QPushButton("", this);
+    themeButton->setStyleSheet("background-color: #444; color: white; border-radius: 2px;");
+    themeButton->setToolTip("Change Theme");
+    connect(themeButton, &QPushButton::clicked, this, &Preferences::close);
+    themeButton->setGeometry(100, 400, 80, 30);
 
     QFormLayout *form = new QFormLayout;
-    form->addRow("", closeButton);
+    form->addRow("Theme", themeButton);
 
     QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(buttons, &QDialogButtonBox::accepted, this, &Preferences::accept);
