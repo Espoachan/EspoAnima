@@ -26,7 +26,7 @@ git clone https://github.com/Espoachan/EspoAnima.git
 Build with qt creator or qmake and make:
 
 ```bash
-qmake
+cmake
 make
 ```
 
