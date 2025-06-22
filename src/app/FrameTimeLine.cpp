@@ -95,7 +95,7 @@ const QImage& FrameTimeLine::currentFrame() const {
 
 void FrameTimeLine::setFrame(int index, const QImage& image) {
     if (index >= 0 && index < frames.size()){
-        frames[index] = image;
+        frames[index] = image.copy();
     }
 }
 int FrameTimeLine::getCurrentIndex() const {

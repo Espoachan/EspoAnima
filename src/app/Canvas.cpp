@@ -15,7 +15,24 @@ Canvas::Canvas(QWidget *parent)
     image.fill(Qt::white);
 */
     setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
 }
+
+bool mouseInside = false;
+
+void Canvas::enterEvent(QEvent *event) {
+    Q_UNUSED(event);
+    mouseInside = true;
+    update();
+}
+
+void Canvas::leaveEvent(QEvent *event) {
+    Q_UNUSED(event);
+    mouseInside = false;
+    update();
+}
+
+
 void Canvas::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton){
         drawing = true;
@@ -37,8 +54,6 @@ void Canvas::mousePressEvent(QMouseEvent *event){
 }
 
 void Canvas::mouseMoveEvent(QMouseEvent *event){
-
-
     if(currentTool != Bucket) {
         // Aquí dibujas líneas si estás con lápiz o borrador
         if(currentTool == Pen){
@@ -48,9 +63,11 @@ void Canvas::mouseMoveEvent(QMouseEvent *event){
         }
 
         if((event->buttons() & Qt::LeftButton) && drawing){
+            
+            Layer &layer = layers[currentLayerIndex];
+            QPainter painter(&layer.getImage());
             QPointF canvasPos = (event->pos() - offset) / scaleFactor;
 
-            QPainter painter(&image);
             if(currentTool == Eraser){
                 // Si es la herramienta de borrado, usamos un color transparente
                 // para borrar el trazo
@@ -61,7 +78,7 @@ void Canvas::mouseMoveEvent(QMouseEvent *event){
                 painter.setRenderHint(QPainter::Antialiasing);
                 painter.setPen(QPen(colorToUse, penWidth, Qt::SolidLine, Qt::RoundCap));
             }
-                painter.drawLine(lastPoint, canvasPos);
+            painter.drawLine(lastPoint, canvasPos);
             lastPoint = canvasPos.toPoint();
             update();
         }
@@ -83,7 +100,7 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event) {
         drawing = false;
 
         if(timeline){
-            timeline->setFrame(timeline->getCurrentIndex(), getImage());
+            timeline->setFrame(timeline->getCurrentIndex(), layers[currentLayerIndex].getImage());
         }
     }
 
@@ -97,10 +114,17 @@ void Canvas::paintEvent(QPaintEvent *event){
     Q_UNUSED(event);
     QPainter painter(this);
 
+    drawBackground(painter, rect());
+
+
     painter.translate(offset);
     painter.scale(scaleFactor, scaleFactor);
 
-    painter.drawImage(0,0,image);
+    for (const Layer &layer : layers) {
+        if (layer.isVisible()) {
+            painter.drawImage(0, 0, layer.getImage());
+        }
+    }
 
     QPointF adjustedPos = (currentMousePos - offset) / scaleFactor;
     int x  = adjustedPos.x();
@@ -191,11 +215,12 @@ void Canvas::bucketFill(const QPoint &startPoint, const QColor &fillColor)
 }
 
 QImage Canvas::getImage() const {
-    return image;
+    if (layers.isEmpty()) return QImage();
+    return layers[currentLayerIndex].getImage();
 }
 
 void Canvas::setImage(const QImage &newImage) {
-    image = newImage;
+    image = newImage.copy();
     update();
 }
 
@@ -205,8 +230,9 @@ void Canvas::setTimeline(FrameTimeLine *timelineDock){
 
 void Canvas::initializeNewCanvas(int width, int height, const QColor &bgColor)
 {
-    image = QImage(width, height, QImage::Format_ARGB32);
-    image.fill(bgColor);
+    layers.clear();  // borra capas anteriores si las hay
+    addLayer(width, height, bgColor);  // agrega una nueva capa visible
+    currentLayerIndex = 0;
     update();
 }
 
@@ -225,4 +251,58 @@ void Canvas::drawBackground(QPainter &painter, const QRect &area)
         }
     }
     
+}
+
+void Canvas::addLayer(int width, int height, const QColor &bgColor) {
+    layers.append(Layer(width, height, bgColor));
+    currentLayerIndex = layers.size() - 1;
+    update();
+}
+
+void Canvas::removeLayer(int index) {
+    if(index >= 0 && index < layers.size()) {
+        layers.remove(index);
+        if(currentLayerIndex >= layers.size()) {
+            currentLayerIndex = layers.size() - 1;
+        }
+        update();
+    }
+}
+
+void Canvas::moveLayer(int fromIndex, int toIndex) {
+    if(fromIndex >= 0 && fromIndex < layers.size() && toIndex >= 0 && toIndex < layers.size() && fromIndex != toIndex) {
+        Layer layer = layers.takeAt(fromIndex);
+        layers.insert(toIndex, layer);
+        update();
+    }
+}
+
+void Canvas::setLayerVisible(int index, bool visible) {
+    if(index >= 0 && index < layers.size()) {
+        layers[index].setVisible(visible);
+        update();
+    }
+}
+
+int Canvas::layerCount() const {
+    return layers.size();
+}
+
+Layer* Canvas::getLayer(int index) {
+    if(index >= 0 && index < layers.size()) {
+        return &layers[index];
+    }
+    return nullptr;
+}
+
+QImage Canvas::compositeImage() const {
+    QImage result(image.width(), image.height(), QImage::Format_ARGB32);
+    result.fill(Qt::transparent);
+    QPainter painter(&result);
+    for(const Layer &layer : layers) {
+        if(layer.isVisible()) {
+            painter.drawImage(0, 0, layer.getImage());
+        }
+    }
+    return result;
 }

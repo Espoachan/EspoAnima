@@ -3,11 +3,20 @@
 
 #include "FrameTimeLine.h"
 #include <QWidget>
+#include "Layer.h"
 
 class Canvas : public QWidget
 {
     Q_OBJECT
 public:
+    void addLayer(int width, int height, const QColor &bgColor = Qt::transparent);
+    void removeLayer(int index);
+    void moveLayer(int fromIndex, int toIndex);
+    void setLayerVisible(int index, bool visible);
+    int layerCount() const;
+    QImage compositeImage() const;
+    Layer* getLayer(int index);
+
     bool drawing = false;
     QImage image;
     QPointF lastPoint;
@@ -26,14 +35,16 @@ public:
 
     Tool currentTool = Pen;
 
-        void setTimeline(FrameTimeLine *timeline);
+    void setTimeline(FrameTimeLine *timeline);
 
     QColor colorToUse = Qt::black;
-    double penWidth = 5.0;
+    double penWidth = 40;
 
     void bucketFill(const QPoint &startPoint, const QColor &fillColor);
     void initializeNewCanvas(int width, int height, const QColor& bgColor);
 
+    void enterEvent(QEvent *event);
+    void leaveEvent(QEvent *event) override;
 
     void setTool(Tool tool);
 
@@ -41,8 +52,15 @@ public:
     QPointF offset = QPointF(0,0);
     explicit Canvas(QWidget *parent = nullptr);
 
+    int getCurrentLayerIndex() const { return currentLayerIndex; }
+    void setCurrentLayerIndex(int index) { currentLayerIndex = index; }
+
+
+
 private:
     FrameTimeLine *timeline = nullptr;
+    QVector<Layer> layers;
+    int currentLayerIndex = 0;
 
 signals:
 
