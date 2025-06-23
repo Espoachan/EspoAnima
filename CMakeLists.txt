@@ -9,23 +9,27 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
 # Archivos fuente
 file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS src/app/*.cpp)
-
-# Archivos de cabecera (pueden ser detectados por patrón si gustas)
+file(GLOB_RECURSE COLORPICKERSOURCES CONFIGURE_DEPENDS src/app/colorpicker/*.cpp)
+file(GLOB_RECURSE COLORPICKERHEADERS CONFIGURE_DEPENDS src/app/colorpicker/*.h)
 file(GLOB HEADERS "src/app/headers/*.h")
 
 # Recursos (qrc)
 set(RESOURCES resources/resources.qrc)
 
 # Generar MOC y recursos
-qt6_wrap_cpp(MOC_SOURCES ${HEADERS})
+qt6_wrap_cpp(MOC_SOURCES
+    ${HEADERS}
+    src/app/colorpicker/ColorPicker.h
+)
 qt6_add_resources(RESOURCE_SOURCES ${RESOURCES})
 
-# Crear el ejecutable
+# Crear el ejecutable con todas las fuentes y cabeceras necesarias
 add_executable(${PROJECT_NAME}
     ${SOURCES}
-    ${HEADERS}
     ${MOC_SOURCES}
     ${RESOURCE_SOURCES}
+    ${COLORPICKERSOURCES}
+    # No hace falta añadir headers aquí, solo cpp y generados por moc
 )
 
 # Incluir rutas
@@ -36,5 +40,3 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 
 # Enlazar con Qt6
 target_link_libraries(${PROJECT_NAME} Qt6::Widgets)
-
-
