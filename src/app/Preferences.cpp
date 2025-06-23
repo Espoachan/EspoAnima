@@ -31,7 +31,7 @@ Preferences::Preferences(QWidget *parent) : QDialog(parent)
         themeButton->setText("Light theme");
         qApp->setStyleSheet(R"(
             QWidget {
-                background-color: #fff;
+                background-color: #c2c2c2;
                 color: black;
             }
 
@@ -100,7 +100,7 @@ Preferences::Preferences(QWidget *parent) : QDialog(parent)
         }else {
             theme = R"(
                 QWidget {
-                    background-color: #fff;
+                    background-color: #c2c2c2;
                     color: black;
                 }
 
