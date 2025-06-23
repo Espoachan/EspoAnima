@@ -9,4 +9,6 @@
 *.qmake.stash
 Makefile
 build/
-
+.vscode/
+.pro
+.ui

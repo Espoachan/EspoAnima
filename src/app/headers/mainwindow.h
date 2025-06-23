@@ -17,6 +17,8 @@
 #include <FrameTimeLine.h>
 #include <QString>
 #include <Preferences.h>
+#include "colorpicker/ColorPicker.h"
+#include "NewProjectWindow.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,11 +41,15 @@ public:
     void exportFn();
     void updateToolButtons(Canvas::Tool tool);
     void openPreferences();
+    void openColorPickerDock();
+    void openTimeLine();
+    void welcomeNewFile();
 //
 
 //estas son de otros.h
     FrameTimeLine *timeline;
     Preferences *preferences;
+    NewProjectWindow *newProjectWindow;
 
 //
     QString resolutionAnswer1;
@@ -67,6 +73,8 @@ private:
     Ui::MainWindow *ui;
     QWidget *centralWidget;
     QDockWidget *toolDock;
+    ColorPicker *colorPicker;
+    QDockWidget *colorPickerDock;
     Canvas *canvas; // agrégalo como miembro privado
 };
 #endif // MAINWINDOW_H
