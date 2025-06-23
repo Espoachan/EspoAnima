@@ -14,12 +14,12 @@
 #include "headers/Preferences.h"
 #include "headers/globals.h"
 #include <QGraphicsDropShadowEffect>
+#include "colorpicker/ColorPicker.h"
+#include "headers/NewProjectWindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
-
-
     //creamos la pantalla
     QScreen *screen  = QGuiApplication::primaryScreen();
     //guardamos el tamaño de la pantalla en "screenGeomtry"
@@ -30,19 +30,34 @@ MainWindow::MainWindow(QWidget *parent)
     int screenHeight = screenGeometry.height();
 
     //cambiamos el tamaño de la pantalla
-    this->resize(screenWidth,screenHeight);
+    this->resize(screenWidth, screenHeight);
     //seteamos un tamaño minimo
-    this->setMinimumSize(400,300);
+    this->setMinimumSize(screenWidth, screenHeight);
+    this->setMaximumSize(screenWidth - 1, screenHeight - 1);
 
+    preferences = new Preferences(this);
+
+    newProjectWindow = new NewProjectWindow(this);
+
+    welcomeNewFile();
 
     //creamos un central widget para canvas
     canvas = new Canvas(this);
-        //centralWidget = new QWidget(this);
-    preferences = new Preferences(this);
+    //centralWidget = new QWidget(this);
+
+    colorPicker = new ColorPicker(this);
+    colorPickerDock = new QDockWidget("Color Picker", this);
+    colorPickerDock->setMinimumHeight(200);
+    colorPickerDock->setMinimumWidth(200);
+    colorPickerDock->setMaximumHeight(200);
+    colorPickerDock->setMaximumWidth(200);
+    colorPickerDock->setWidget(colorPicker);
+    addDockWidget(Qt::RightDockWidgetArea, colorPickerDock);
 
     int defaultWidth = 1280;
     int defaultHeight = 720;
     QColor defaultBgColor = Qt::white;
+
 
     //timeline = new FrameTimeLine(this);
     canvas->initializeNewCanvas(defaultWidth, defaultHeight, defaultBgColor);
@@ -59,21 +74,22 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     canvas->setTimeline(timeline);
-    QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect;
+    /*QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect;
     effect->setBlurRadius(5);
     effect->setXOffset(2);
     effect->setYOffset(2);
-    effect->setColor(Qt::black);
+    effect->setColor(Qt::black);*/
     //creamos un dock que se llame "tools"
     toolDock = new QDockWidget("Tools", this);
     toolDock->setStyleSheet("");
-    toolDock->setGraphicsEffect(effect);
+    // toolDock->setGraphicsEffect(effect);
     //seteamos las areas permitidas para el dock (izquierda y derecha)
     toolDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     this->setStyleSheet("");
     int toolDockHeight = toolDock->height();
     toolDock->resize(300, toolDockHeight);
-    toolDock->setMinimumWidth(100);
+    toolDock->setMinimumWidth(110);
+    toolDock->setMaximumWidth(110);
 
     //hacemos un QWidget para el contenido
     QWidget *dockContent = new QWidget();
@@ -112,8 +128,9 @@ MainWindow::MainWindow(QWidget *parent)
     colorBtn->setGeometry(10, 100, 100,30);
 
     //aplicamos icono a el color picker
-    colorBtn->setIcon(QIcon(":/data/icons/color_picker_icon"));
-    colorBtn->setIconSize(QSize(24,24));
+    //colorBtn->setIcon(QIcon(":/data/icons/color_picker_icon"));
+    //colorBtn->setIconSize(QSize(24,24));
+    colorBtn->setStyleSheet("background-color: #000; border: 1px solid #000000; border-radius: 2px;");
 
     //creamos un boton para abrir la ventana de cambiar el tamaño del lápiz
     penSizeBtn = new QPushButton("Pen Size", dockContent);
@@ -181,9 +198,18 @@ MainWindow::MainWindow(QWidget *parent)
         canvas->setTool(Canvas::Bucket);
         updateToolButtons(Canvas:: Bucket);
     });
+    
 
-    //conectar el boton de color para conseguir el color escogido, y aplicarcelo al lápiz
-    connect(colorBtn, &QPushButton::clicked, this, [=](){QColor color = QColorDialog::getColor(canvas->penColor, this, "Select pen color");if(color.isValid()){canvas->setPenColor(color);}});
+    // conectar el botón de color
+    connect(colorBtn, &QPushButton::clicked, this, [=]() {
+        QColor selectedColor = QColorDialog::getColor(canvas->penColor, this, "Select pen color");
+
+        if (selectedColor.isValid()) {
+            canvas->setPenColor(selectedColor);
+            QString selectedColorStr = selectedColor.name(); // "#rrggbb"
+            colorBtn->setStyleSheet(QString("background-color: %1;").arg(selectedColorStr));
+        }
+    });
 
     //le seteamos el widget "dockContent" a toolDock
     toolDock->setWidget(dockContent);
@@ -206,7 +232,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     penBtn->setStyleSheet("");
     eraserBtn->setStyleSheet("");
-    colorBtn->setStyleSheet("");
     penSizeBtn->setStyleSheet("");
     paintBucketBtn->setStyleSheet("");
 
@@ -282,6 +307,16 @@ void MainWindow::openToolsDock(){
     toolDock->show();
 }
 
+void MainWindow::openColorPickerDock(){
+    addDockWidget(Qt::RightDockWidgetArea, colorPickerDock);
+    colorPickerDock->show();
+}
+
+void MainWindow::openTimeLine(){
+    addDockWidget(Qt::BottomDockWidgetArea, timeline);
+    timeline->show();
+}
+
 void MainWindow::exportFn(){
     QString fileName = QFileDialog::getSaveFileName(this, "Export image",  projectName, "PNG (*.png)");
     if (!fileName.isEmpty()){
@@ -331,4 +366,8 @@ void MainWindow::updateToolButtons(Canvas::Tool tool){{
 
 void MainWindow::openPreferences(){
     preferences->exec();
+}
+
+void MainWindow::welcomeNewFile(){
+    newProjectWindow->exec();
 }
