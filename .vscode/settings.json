@@ -5,6 +5,14 @@
         "array": "cpp",
         "qobject": "cpp",
         "qpushbutton": "cpp",
-        "qdialog": "cpp"
+        "qdialog": "cpp",
+        "qtoolbutton": "cpp"
+    },
+    
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/build": true,
+        "**/.qtcreator": true,
     }
+
 }

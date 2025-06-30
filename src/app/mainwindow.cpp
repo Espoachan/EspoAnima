@@ -44,13 +44,21 @@ MainWindow::MainWindow(QWidget *parent)
     //creamos un central widget para canvas
     canvas = new Canvas(this);
     //centralWidget = new QWidget(this);
+    if (canvas->layerCount() == 0) {
+        canvas->layerCount() + 1;
+        canvas->addLayer(1280, 720, Qt::white);
+    }
 
-    colorPicker = new ColorPicker(this);
+    layerPanel = new LayerPanel(canvas, this);
+    layerPanel->setWindowTitle("Layers");
+    layerPanel->setMinimumWidth(150);
+    layerPanel->setMaximumWidth(300);
+    addDockWidget(Qt::RightDockWidgetArea, layerPanel);
+
+    colorPicker = new ColorPicker(this, canvas);
     colorPickerDock = new QDockWidget("Color Picker", this);
-    colorPickerDock->setMinimumHeight(200);
-    colorPickerDock->setMinimumWidth(200);
-    colorPickerDock->setMaximumHeight(200);
-    colorPickerDock->setMaximumWidth(200);
+    colorPickerDock->setMinimumSize(300, 300);
+    colorPickerDock->setMaximumSize(300, 300);
     colorPickerDock->setWidget(colorPicker);
     addDockWidget(Qt::RightDockWidgetArea, colorPickerDock);
 
@@ -74,6 +82,9 @@ MainWindow::MainWindow(QWidget *parent)
     });
 
     canvas->setTimeline(timeline);
+    timeline->_setCanvas(canvas);
+    timeline->setLayerPanel(layerPanel);
+
     /*QGraphicsDropShadowEffect *effect = new QGraphicsDropShadowEffect;
     effect->setBlurRadius(5);
     effect->setXOffset(2);
@@ -280,7 +291,10 @@ void MainWindow::createNewFile(){
         timeline->setCurrentHeight(height);
         timeline->setCurrentWidth(width);
 
+        layerPanel->setNewLayerParams(width, height, bgColor);
+
         canvas->initializeNewCanvas(width, height, bgColor);
+        layerPanel->refreshList();
         timeline->addNewFrame(width, height, bgColor);
         canvas->update();
 

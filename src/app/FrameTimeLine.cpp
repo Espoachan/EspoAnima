@@ -4,6 +4,9 @@
 #include <QPixmap>
 #include <QPainter>
 #include "headers/NewProjectDialog.h"
+#include "headers/Canvas.h"
+#include "headers/LayerPanel.h"
+
 
 FrameTimeLine::FrameTimeLine(QWidget *parent) : QDockWidget("Timeline", parent), currentIndex(0){
     frameContainer = new QWidget;
@@ -47,36 +50,78 @@ void FrameTimeLine::setCurrentBgColor(QColor c) {
 
 void FrameTimeLine::addNewFrame() {
     addNewFrame(currentWidth, currentHeight, currentBgColor);
+    canvas->setCurrentLayerIndex(-1);
+    layerPanel->deselectLayer();
+
 }
 
 void FrameTimeLine::addNewFrame(int width, int height, QColor color) {
+    if(!canvas) return;
 
-    QImage newFrame(currentWidth,currentHeight, QImage::Format_ARGB32);
+    int layerCount = canvas->layerCount();
+
+    QVector<QImage> layerImages;
+
+    for (int i = 0; i < layerCount; ++i) {
+        Layer* layer = canvas->getLayer(i);
+        QImage img(width, height, QImage::Format_ARGB32);
+        img.fill(Qt::transparent);
+        layerImages.append(img);
+    }
+
+    frameLayerContents.append(layerImages);
+
+    /*QImage newFrame(currentWidth,currentHeight, QImage::Format_ARGB32);
     newFrame.fill(currentBgColor);
-    frames.append(newFrame);
-    
-    QPushButton *btn = new QPushButton(QString::number(frames.size()), frameContainer);
+    frames.append(newFrame);*/
+
+    QPushButton *btn = new QPushButton(QString::number(frameLayerContents.size()), frameContainer);
     btn->setFixedSize(60,60);
 
-   // int index = frameButtons.size();
+    // int index = frameButtons.size();
 
-    connect(btn, &QPushButton::clicked,  this, [=]() {
+    connect(btn, &QPushButton::clicked, this, [=]() {
         switchToFrame(frameButtons.indexOf(btn));
+        if (canvas && layerPanel) {
+            canvas->setCurrentLayerIndex(-1);
+            layerPanel->deselectLayer();
+        }
     });
 
     frameButtons.append(btn);
     layout->addWidget(btn);
 
-    currentIndex = frames.size() - 1;
-    UpdateUI();
-    emit frameSelected(currentIndex);
+    //currentIndex = frames.size() - 1;
+    currentIndex = frameLayerContents.size() - 1;
+    switchToFrame(currentIndex);
+    /*UpdateUI();
+    emit frameSelected(currentIndex);*/
 }
 
 void FrameTimeLine::switchToFrame(int index) {
-    if(index < 0 || index >= frames.size()) return;
+    if(index < 0 || index >= frameLayerContents.size()) return;
+    
+    QVector<QImage> currentImages;
+    for (int i = 0; i < canvas->layerCount(); ++i) {
+        Layer *layer = canvas->getLayer(i);
+        if (layer) currentImages.append(layer->getImage().copy()); 
+    }
+    frameLayerContents[currentIndex] = currentImages;
+
+    QVector<QImage> newImages = frameLayerContents[index];
+    for (int i = 0; i < newImages.size(); ++i) {
+        Layer *layer = canvas->getLayer(i);
+        if (layer) {
+            layer->getImage() = newImages[i].copy();
+        }
+    }
+
     currentIndex = index;
-    UpdateUI();
+    if (layerPanel) layerPanel->refreshList();
     emit frameSelected(index);
+    emit frameSwitched();
+    UpdateUI();
+
 }
 
 void FrameTimeLine::UpdateUI() {
@@ -114,3 +159,6 @@ void FrameTimeLine::clear(){
 
     UpdateUI();
 }
+
+void FrameTimeLine::_setCanvas(Canvas* c) { canvas = c; }
+void FrameTimeLine::setLayerPanel(LayerPanel* lp) { layerPanel = lp; }

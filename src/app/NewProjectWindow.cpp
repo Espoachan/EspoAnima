@@ -3,6 +3,7 @@
 #include <QScreen>
 #include <QGuiApplication>
 #include <QGridLayout>
+#include "headers/NewProjectDialog.h"
 
 NewProjectWindow::NewProjectWindow(QWidget *parent) : QDialog(parent)
 {
@@ -24,8 +25,20 @@ NewProjectWindow::NewProjectWindow(QWidget *parent) : QDialog(parent)
     QPushButton *startProjectBtn = new QPushButton("Start new project", this);
     QPushButton *openProjectBtn = new QPushButton("Open a project", this);
     layout->addWidget(welcomeLabel, 0, 0, 1, 2, Qt::AlignLeft | Qt::AlignTop);
-    layout->addWidget(startProjectBtn, 0.5, 0, 1, 2, Qt::AlignLeft | Qt::AlignTop);
-    layout->addWidget(openProjectBtn, 1, 0, 1, 2, Qt::AlignLeft | Qt::AlignTop);
+    layout->addWidget(startProjectBtn, 1, 0, 1, 2, Qt::AlignLeft | Qt::AlignTop);
+    layout->addWidget(openProjectBtn, 2, 0, 1, 2, Qt::AlignLeft | Qt::AlignTop);
+
+    connect(startProjectBtn, &QPushButton::clicked, this, [this]() {
+        NewProjectDialog *newProjectDialog = new NewProjectDialog(this);
+        newProjectDialog->exec();
+        if (newProjectDialog->result() == QDialog::Accepted) {
+            QString projectName = newProjectDialog->getProjectName();
+            int width = newProjectDialog->getWidth();
+            int height = newProjectDialog->getHeight();
+            int fps = newProjectDialog->getFps();
+            QColor backgroundColor = newProjectDialog->getBackgroundColor();
+        }
+    });
 
 }
 

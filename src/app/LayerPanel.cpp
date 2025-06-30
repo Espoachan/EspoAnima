@@ -1,8 +1,9 @@
 #include "headers/LayerPanel.h"
 #include "headers/Canvas.h"
+#include <QMessageBox>
 
 LayerPanel::LayerPanel(Canvas* canvas, QWidget* parent)
-    : QDockWidget("Capas", parent), canvas(canvas)
+    : QDockWidget("Layers", parent), canvas(canvas)
 {
     QWidget* container = new QWidget(this);
     QVBoxLayout* layout = new QVBoxLayout(container);
@@ -29,7 +30,7 @@ LayerPanel::LayerPanel(Canvas* canvas, QWidget* parent)
     setWidget(container);
 
     connect(addBtn, &QPushButton::clicked, this, &LayerPanel::addLayer);
-    connect(addBtn, &QPushButton::clicked, this, &LayerPanel::removeLayer);
+    connect(removeBtn, &QPushButton::clicked, this, &LayerPanel::removeLayer);
     connect(upBtn, &QPushButton::clicked, this, &LayerPanel::moveLayerUp);
     connect(downBtn, &QPushButton::clicked, this, &LayerPanel::moveLayerDown);
     connect(toggleVisibilityBtn, &QPushButton::clicked, this, &LayerPanel::toggleVisibility);
@@ -54,8 +55,21 @@ void LayerPanel::refreshList() {
     layerList->setCurrentRow(canvas->getCurrentLayerIndex());
 }
 
+void LayerPanel::setNewLayerParams(int width, int height, const QColor &bgColor) {
+    newLayerWidth = width;
+    newLayerHeight = height;
+    newLayerBgColor = Qt::transparent;
+}
+
 void LayerPanel::addLayer() {
-    canvas->addLayer(1280, 720, Qt::transparent);  // Puedes ajustar tamaño/color
+    if(canvas->layerCount() <= 0) {
+        newLayerBgColor = Qt::white;
+    }
+    canvas->addLayer(newLayerWidth, newLayerHeight, newLayerBgColor);
+    Layer* layer = canvas->getLayer(canvas->layerCount() - 1);
+    if (layer) {
+        layer->setName(QString("Layer %1").arg(canvas->layerCount()));
+    }
     refreshList();
 }
 
@@ -65,6 +79,10 @@ void LayerPanel::removeLayer() {
         canvas->removeLayer(index);
         refreshList();
     }
+    if (canvas->layerCount() <= 1) {
+    QMessageBox::warning(this, "Error", "No puedes eliminar todas las capas.");
+    return;
+}
 }
 
 void LayerPanel::moveLayerUp() {
@@ -94,4 +112,10 @@ void LayerPanel::toggleVisibility() {
             refreshList();
         }
     }
+    update(); // Ensure the canvas is updated to reflect visibility changes
+}
+
+void LayerPanel::deselectLayer() {
+    layerList->clearSelection();
+    layerList->setCurrentRow(-1);
 }

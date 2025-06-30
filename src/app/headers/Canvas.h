@@ -1,9 +1,12 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "FrameTimeLine.h"
 #include <QWidget>
 #include "Layer.h"
+
+class Canvas;
+
+class FrameTimeLine;
 
 class Canvas : public QWidget
 {
@@ -55,12 +58,14 @@ public:
     int getCurrentLayerIndex() const { return currentLayerIndex; }
     void setCurrentLayerIndex(int index) { currentLayerIndex = index; }
 
+    int currentLayerIndex = 0;
+
 
 
 private:
     FrameTimeLine *timeline = nullptr;
     QVector<Layer> layers;
-    int currentLayerIndex = 0;
+
 
 signals:
 

@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QRgb>
 #include <QStack>
+#include "colorpicker/ColorPicker.h"
 
 Canvas::Canvas(QWidget *parent)
     : QWidget{parent}
@@ -55,6 +56,7 @@ void Canvas::mousePressEvent(QMouseEvent *event){
 
 void Canvas::mouseMoveEvent(QMouseEvent *event){
     if(currentTool != Bucket) {
+        if (currentLayerIndex < 0 || currentLayerIndex >= layers.size()) return;
         // Aquí dibujas líneas si estás con lápiz o borrador
         if(currentTool == Pen){
             colorToUse = penColor;
@@ -220,8 +222,10 @@ QImage Canvas::getImage() const {
 }
 
 void Canvas::setImage(const QImage &newImage) {
-    image = newImage.copy();
-    update();
+    if (currentLayerIndex >= 0 && currentLayerIndex < layers.size()) {
+        layers[currentLayerIndex].getImage() = newImage.copy();  // Aquí se aplica el cambio real
+        update();
+    }
 }
 
 void Canvas::setTimeline(FrameTimeLine *timelineDock){

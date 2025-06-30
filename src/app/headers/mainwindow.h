@@ -19,6 +19,7 @@
 #include <Preferences.h>
 #include "colorpicker/ColorPicker.h"
 #include "NewProjectWindow.h"
+#include "LayerPanel.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -51,6 +52,7 @@ public:
     Preferences *preferences;
     NewProjectWindow *newProjectWindow;
 
+
 //
     QString resolutionAnswer1;
     QString resolutionAnswer2;
@@ -70,6 +72,7 @@ public:
 private slots:
 
 private:
+    LayerPanel *layerPanel;
     Ui::MainWindow *ui;
     QWidget *centralWidget;
     QDockWidget *toolDock;

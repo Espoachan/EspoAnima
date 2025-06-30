@@ -11,6 +11,8 @@
 #include <QScrollArea>
 #include <QImage>
 #include <QWidget>
+#include "Canvas.h"
+#include "LayerPanel.h"
 
 class FrameTimeLine : public QDockWidget
 {
@@ -21,7 +23,9 @@ public:
     const QImage& currentFrame() const;
     void setFrame(int index, const QImage& image);
     void addNewFrame(int width, int height, QColor color);
-        void addNewFrame();
+    void addNewFrame();
+    void _setCanvas(Canvas* canvas);
+    void setLayerPanel(LayerPanel* layerPanel);
 
 
     int getCurrentIndex() const;
@@ -34,8 +38,12 @@ public:
 
 signals:
     void frameSelected(int index);
+    void frameSwitched();
 
 private:
+    Canvas* canvas = nullptr;
+    LayerPanel* layerPanel = nullptr;
+
     QVector<QImage> frames;
     QVector<QPushButton*> frameButtons;
     int currentIndex;
@@ -48,6 +56,7 @@ private:
 
     void UpdateUI();
     void switchToFrame(int index);
+    QVector<QVector<QImage>> frameLayerContents;
 };
 
 #endif // FRAMETIMELINE_H
