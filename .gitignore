@@ -6,9 +6,9 @@
 *.a
 *.user
 *.pro.user
+*.pro
 *.qmake.stash
+*.ui
 Makefile
 build/
 .vscode/
-.pro
-.ui
