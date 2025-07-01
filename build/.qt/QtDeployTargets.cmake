@@ -1,0 +1,2 @@
+set(__QT_DEPLOY_TARGET_EspoAnima_FILE /home/leonardo/EspoAnima/build/EspoAnima)
+set(__QT_DEPLOY_TARGET_EspoAnima_TYPE EXECUTABLE)

@@ -1,0 +1,13 @@
+# Hashes of file build rules.
+2771393deaaaee0c8c31643511698c70 qrc_resources.cpp
+0cce66bf013c6b0393fc7a607984a08f src/app/colorpicker/moc_ColorPicker.cpp
+db4d78d729a106f85c59e674643af82e src/app/headers/moc_Canvas.cpp
+ca0f2774eb4b77f5a8ed7fa11cc356db src/app/headers/moc_FrameTimeLine.cpp
+b459c17fb1831c16a7fa0ad40aa38a9c src/app/headers/moc_Layer.cpp
+4187d4afa2d3862506315bff8a744106 src/app/headers/moc_LayerPanel.cpp
+cea0e7c45dc068ce4829b1cad85d84b0 src/app/headers/moc_NewProjectDialog.cpp
+715f794954c1ff64a23bed280ab31913 src/app/headers/moc_NewProjectWindow.cpp
+22033dc78b26eba5dbbb8c51e3eba226 src/app/headers/moc_Preferences.cpp
+c778f22d95bed1e8e5e3eac6eb6d9e62 src/app/headers/moc_globals.cpp
+7e9e3d5a4c60c543085864fd1de769a4 src/app/headers/moc_mainwindow.cpp
+a43599dc2efe23fb9dc101eb9fe94e50 src/app/headers/moc_menubarhelper.cpp

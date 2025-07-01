@@ -1,0 +1,3 @@
+/home/leonardo/EspoAnima/build/CMakeFiles/EspoAnima.dir
+/home/leonardo/EspoAnima/build/CMakeFiles/edit_cache.dir
+/home/leonardo/EspoAnima/build/CMakeFiles/rebuild_cache.dir

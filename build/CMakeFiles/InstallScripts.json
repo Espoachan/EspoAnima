@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/leonardo/EspoAnima/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
