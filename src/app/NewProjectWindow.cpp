@@ -38,6 +38,7 @@ NewProjectWindow::NewProjectWindow(QWidget *parent) : QDialog(parent)
             int height = newProjectDialog->getHeight();
             int fps = newProjectDialog->getFps();
             QColor backgroundColor = newProjectDialog->getBackgroundColor();
+            this->close();
         }
     });
 
