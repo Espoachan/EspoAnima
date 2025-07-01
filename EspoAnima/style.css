@@ -1,0 +1,79 @@
+* {
+	background-color: #1F1C2C;
+	color: white;
+	font-family: arial;
+	font-weight: bold;
+	margin: 0;
+	letter-spacing: 1.5px;
+}
+
+.topBar {
+      width: 100%;
+      height: 60px;
+      background-color: #111;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      font-size: 24px;
+      user-select: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;   
+      filter: drop-shadow(0px 0.1px 2px #000);
+}
+
+.espoanima {
+	display: inline-block;
+	background-color: transparent;
+	color: #928DAB;
+	font-size: 30px;
+}
+
+.githubLink {
+	text-decoration-line: none;
+	background-color: transparent;
+
+	position: fixed;
+	right: 10px;
+}
+
+.downloadButton {
+	background-color: #928DAB;
+	border: none;
+	border-radius: 8px;
+	cursor: not-allowed;
+
+	position: fixed;
+	right: 45px;
+	height: 30px;
+	width: 100px;
+
+    transition: all 0.3s ease;
+}
+
+.downloadButton:hover{
+	background-color: #7D7992;
+	color: #CECECE;
+    padding: 5px 20px;
+    font-size: 12px;
+
+}
+
+.warningBox {
+	height: 45px;
+	width: 100%;
+	background-color: #4e111b;
+	padding-top: 65px;      
+	filter: drop-shadow(0px 0.1px 5px #000);
+}
+
+.bugParraf {
+	color: #B5B5B5;
+	background-color: transparent;
+	text-align: center;
+}
