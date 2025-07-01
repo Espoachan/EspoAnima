@@ -77,3 +77,89 @@
 	background-color: transparent;
 	text-align: center;
 }
+
+.footer {
+  width: 100%;
+  padding: 15px 20px;
+  background-color: #111;
+  color: #928DAB;
+  text-align: center;
+  font-size: 14px;
+  position: fixed;      /* si quieres que quede fijo abajo */
+  bottom: 0;
+  left: 0;
+  box-shadow: 0 -1px 5px rgba(0,0,0,0.5);
+}
+
+.copyrightParraf {
+	background-color: transparent;
+}
+
+
+@media (max-width: 480px) {
+	.espoanima {
+		font-size: 18px;
+	}
+
+	.downloadButton {
+		width: 80px;
+		font-size: 10px;
+	}
+
+	.githubLink {
+		font-size: 18px;
+	}
+
+	.warningBox {
+		padding-top: 70px;
+	}
+
+	.topBar {
+		height: 55px;
+	}
+
+	.downloadButton:hover {
+		padding: 4px 14px;
+		font-size: 10px;
+	}
+}
+
+@media (max-width: 768px) {
+	.warningBox {
+		height: 70px;
+	}
+}
+
+@media (max-width: 534px) {
+	.warningBox {
+		height: 80px;
+	}
+}
+
+@media (max-width: 401px) {
+	.warningBox {
+		height: 98px;
+	}
+
+	.topBar {
+		height: 65px;
+	}
+}
+
+@media (max-width: 308px) {
+	body {
+		font-size: 10px;
+	}
+}
+
+@media (max-width: 269px) {
+	.downloadButton {
+		display: none;
+	}
+}
+
+@media (max-width: 175px) {
+	.githubLink {
+		display: none;
+	}
+}
