@@ -4,11 +4,11 @@
 #include <QtMath>
 #include "../headers/Canvas.h"
 
-ColorPicker::ColorPicker(QWidget *parent)
+ColorPicker::ColorPicker(QWidget *parent, Canvas *canvas)
     : QWidget(parent),
       hue(0.0),
-      currentColor(Qt::white),
-      canvas(c)
+      currentColor(Qt::white),            
+      canvas(canvas)
 {
     setMinimumSize(180, 180);
     generateHuePixmap();
@@ -168,9 +168,11 @@ void ColorPicker::mousePressEvent(QMouseEvent *event) {
                 hueSelector = c + dir * radiusInner();
             } else {
                 hueSelector = pos;
-            }
-
+            }               
             generateTrianglePixmap();  // Solo aquí porque hue cambió
+            currentColor = colorAtPoint(triangleSelector);
+            canvas->penColor = currentColor;
+            emit colorSelected(currentColor);
             update();
         }
     } else if (pointInTriangle(pos)) {
@@ -208,7 +210,9 @@ void ColorPicker::mouseMoveEvent(QMouseEvent *event) {
 
             // Sólo regenerar el triángulo si cambió el hue
             generateTrianglePixmap();
-
+            currentColor = colorAtPoint(triangleSelector);
+            canvas->penColor = currentColor;
+            emit colorSelected(currentColor);
             update();
         }
     } else if (pointInTriangle(pos)) {

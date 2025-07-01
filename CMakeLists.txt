@@ -29,7 +29,6 @@ add_executable(${PROJECT_NAME}
     ${MOC_SOURCES}
     ${RESOURCE_SOURCES}
     ${COLORPICKERSOURCES}
-    # No hace falta añadir headers aquí, solo cpp y generados por moc
 )
 
 # Incluir rutas

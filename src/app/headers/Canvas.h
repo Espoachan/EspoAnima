@@ -4,8 +4,6 @@
 #include <QWidget>
 #include "Layer.h"
 
-class Canvas;
-
 class FrameTimeLine;
 
 class Canvas : public QWidget

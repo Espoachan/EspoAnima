@@ -6,12 +6,14 @@
 #include <QPolygonF>
 #include <QPixmap>
 
+class Canvas;
+
 class ColorPicker : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit ColorPicker(QWidget *parent = nullptr);
+    //explicit ColorPicker(QWidget *parent = nullptr);
     explicit ColorPicker(QWidget *parent = nullptr, Canvas* canvas = nullptr);
     void setCanvas(Canvas* canvas);
 
@@ -31,7 +33,7 @@ protected:
 
 private:
     qreal hue;              // valor actual del tono [0..1]
-    Canvas* canvas;
+    Canvas* canvas = nullptr;
 
     QPointF hueSelector;      // posición del selector en el círculo
     QPointF triangleSelector; // posición del selector en el triángulo
