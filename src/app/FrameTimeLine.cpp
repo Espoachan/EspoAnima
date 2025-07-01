@@ -1,12 +1,12 @@
 #include "headers/FrameTimeLine.h"
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QPixmap>
-#include <QPainter>
 #include "headers/NewProjectDialog.h"
 #include "headers/Canvas.h"
 #include "headers/LayerPanel.h"
 
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QPixmap>
+#include <QPainter>
 
 FrameTimeLine::FrameTimeLine(QWidget *parent) : QDockWidget("Timeline", parent), currentIndex(0){
     frameContainer = new QWidget;

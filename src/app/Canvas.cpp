@@ -1,12 +1,13 @@
 #include "headers/Canvas.h"
 #include "headers/FrameTimeLine.h"
 #include "headers/NewProjectDialog.h"
+#include "colorpicker/ColorPicker.h"
+
 #include <QMouseEvent>
 #include <QPainter>
 #include <QKeyEvent>
 #include <QRgb>
 #include <QStack>
-#include "colorpicker/ColorPicker.h"
 
 Canvas::Canvas(QWidget *parent)
     : QWidget{parent}

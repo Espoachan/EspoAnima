@@ -1,7 +1,8 @@
 #include "headers/Preferences.h"
+#include "headers/globals.h"
+
 #include <QFormLayout>
 #include <QDialogButtonBox>
-#include "headers/globals.h"
 #include <QApplication>
 #include <QSettings>
 

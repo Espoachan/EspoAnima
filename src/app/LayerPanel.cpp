@@ -1,5 +1,6 @@
 #include "headers/LayerPanel.h"
 #include "headers/Canvas.h"
+
 #include <QMessageBox>
 
 LayerPanel::LayerPanel(Canvas* canvas, QWidget* parent)

@@ -1,8 +1,9 @@
 #include "ColorPicker.h"
+#include "../headers/Canvas.h"
+
 #include <QPainter>
 #include <QMouseEvent>
 #include <QtMath>
-#include "../headers/Canvas.h"
 
 ColorPicker::ColorPicker(QWidget *parent, Canvas *canvas)
     : QWidget(parent),

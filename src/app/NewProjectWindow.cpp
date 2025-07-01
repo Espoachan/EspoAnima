@@ -1,9 +1,10 @@
 #include "headers/NewProjectWindow.h"
+#include "headers/NewProjectDialog.h"
+
 #include <QLabel>
 #include <QScreen>
 #include <QGuiApplication>
 #include <QGridLayout>
-#include "headers/NewProjectDialog.h"
 
 NewProjectWindow::NewProjectWindow(QWidget *parent) : QDialog(parent)
 {

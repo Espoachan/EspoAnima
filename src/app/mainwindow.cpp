@@ -1,21 +1,22 @@
 #include "headers/mainwindow.h"
 #include "headers/menubarhelper.h"
+#include "colorpicker/ColorPicker.h"
+#include "headers/NewProjectWindow.h"
+#include "headers/NewProjectDialog.h"
+#include "headers/Preferences.h"
+#include "headers/globals.h"
+#include "headers/Canvas.h"
+
 #include <QDockWidget>
 #include <QColorDialog>
 #include <QFileDialog>
 #include <QMessageBox>
-#include "headers/Canvas.h"
 #include <QToolButton>
 #include <QLineEdit>
 #include <QDoubleValidator>
 #include <QShortcut>
 #include <QInputDialog>
-#include "headers/NewProjectDialog.h"
-#include "headers/Preferences.h"
-#include "headers/globals.h"
 #include <QGraphicsDropShadowEffect>
-#include "colorpicker/ColorPicker.h"
-#include "headers/NewProjectWindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

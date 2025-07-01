@@ -1,8 +1,9 @@
 #include "headers/NewProjectDialog.h"
+#include "headers/globals.h"
+
 #include <QFormLayout>
 #include <QDialogButtonBox>
 #include <QColorDialog>
-#include "headers/globals.h"
 
 NewProjectDialog::NewProjectDialog(QWidget *parent) : QDialog(parent), backgroundColor(Qt::white)
 {
